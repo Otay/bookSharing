@@ -77,7 +77,7 @@ class Login extends React.Component {
 
 }
 
-export default function (props) {
+export default function wrapper(props) {
     const history = useNavigate();
     return <Login {...props} history={history} />;
   }
