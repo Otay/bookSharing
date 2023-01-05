@@ -46,7 +46,7 @@ class ListBooks extends React.Component {
   }
 }
 
-export default function wrapper(props) {
+export default function Wrapper(props) {
   const goTo = useNavigate();
   return <ListBooks {...props} goTo={goTo} />;
 }
