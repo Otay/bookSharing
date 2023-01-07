@@ -10,6 +10,8 @@ import {Route,Routes, useNavigate, useLocation} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import React from 'react';
+import Spinner from 'react-bootstrap/Spinner'
+import './App.scss'
 
 export const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
 
@@ -41,31 +43,46 @@ function App() {
             if(token){
               request.headers.Authorization = `Bearer ${token}`
             }
+            setLoading(true)
             return request
           }, (error)=>{
+            setLoading(false)
+              return Promise.reject(error);
+            });
+
+            axios.interceptors.response.use(function (response) {
+              setLoading(false)
+              return response;
+            }, (error) => {
+              setLoading(false)
             return Promise.reject(error);
           });
   })
 
-  const [userInfo, setUserInfo] = React.useState('');
+  const [userInfo, setUserInfo] = useState('');
+  const [loading, setLoading] = useState(false)
   
   return (
     <div>
+      {loading && (
+        <div className="background-spinner">
+          <div className="spinner">
+            <Spinner animation="grow" variant="light" />
+          </div>
+        </div>
+      )}
       <UserConnected userInfo={userInfo} setUserInfo={setUserInfo} />
-     <div className="App">
+      <div className="App">
         <Routes>
-          <Route path="listBooks" element={<ListBooks/>}/>
-          <Route path="myBooks" element={<MyBooks/>}/>
-          <Route path="addBook" element={<AddBook/>}/>
-          <Route path="addBook/:bookId" element={<AddBook/>}/>
-          <Route path="myBorrows" element={<MyBorrows/>}/>
-          <Route path="addUser" element={<AddUser setUserInfo={setUserInfo}/>}/>
-          <Route path="*" element={<Login setUserInfo={setUserInfo}/>}/>
+          <Route path="listBooks" element={<ListBooks />} />
+          <Route path="myBooks" element={<MyBooks />} />
+          <Route path="addBook" element={<AddBook />} />
+          <Route path="addBook/:bookId" element={<AddBook />} />
+          <Route path="myBorrows" element={<MyBorrows />} />
+          <Route path="addUser" element={<AddUser setUserInfo={setUserInfo} />} />
+          <Route path="*" element={<Login setUserInfo={setUserInfo} />} />
         </Routes>
       </div>
-      {/*
-      <Label color="red" label="My solution"/>*/
-      }
     </div>
   );
 }
