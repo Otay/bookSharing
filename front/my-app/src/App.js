@@ -9,7 +9,7 @@ import Header from'./Header.js';
 import {Route,Routes, useNavigate, useLocation} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import React from 'react';
+import {useState, useEffect} from 'react';
 import Spinner from 'react-bootstrap/Spinner'
 import './App.scss'
 
@@ -19,7 +19,7 @@ const UserConnected = ({ setUserInfo, userInfo }) => {
   const history = useNavigate();
   let location = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setUserInfo(null)
     axios.get('/isConnected').then(response => {
       setUserInfo(response.data)
@@ -37,7 +37,7 @@ const UserConnected = ({ setUserInfo, userInfo }) => {
 
 function App() {
 
-  React.useEffect(()=>{
+  useEffect(()=>{
           axios.interceptors.request.use(function(request){
             const token = sessionStorage.getItem(AUTH_TOKEN_KEY)
             if(token){
